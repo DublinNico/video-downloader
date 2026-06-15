@@ -1,4 +1,4 @@
-import dotenv from "dotenv";
+const dotenv = require("dotenv");
 dotenv.config();
 
 const express = require('express')
@@ -18,15 +18,7 @@ if (!fs.existsSync(DOWNLOADS_DIR)) {
 
 app.use(express.json())
 app.use(express.static(path.join(__dirname, "public")))
-app.use("/downoads", express.static(DOWNLOADS_DIR))
-
-app.use("/api", (req, res, next) => {
-    const key = req.headers["x-api-key"];
-    if (key !== process.env.API_KEY) {
-        return res.status(401).json({ error: "Unauthorised "});
-    }
-    next();
-});
+app.use("/downloads", express.static(DOWNLOADS_DIR))
 
 app.get("/api/search", (req, res) => {
     const { q, count = 5 } = req.query
@@ -45,6 +37,6 @@ app.get("/api/search", (req, res) => {
     })
 })
 
- app.listenerCount(PORT, () => {
-        console.log(`Server running at http:localhost:${PORT}`)
-    })
+app.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}`)
+})
